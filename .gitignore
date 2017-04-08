@@ -1,0 +1,11 @@
+dist
+.cabal-sandbox
+*.js
+*.webapp
+*.stats
+out
+site_key.txt
+log
+jsbuild
+cabal.sandbox.config
+shell.nix

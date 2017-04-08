@@ -1,0 +1,15 @@
+[submodule "deps/reflex-platform"]
+	path = deps/reflex-platform
+	url = https://github.com/reflex-frp/reflex-platform
+[submodule "deps/servant-reflex"]
+	path = deps/servant-reflex
+	url = https://github.com/imalsogreg/servant-reflex
+[submodule "deps/groundhog"]
+	path = deps/groundhog
+	url = https://github.com/lykahb/groundhog
+[submodule "deps/groundhog-ghcjs"]
+	path = deps/groundhog-ghcjs
+	url = https://github.com/mightybyte/groundhog-ghcjs
+[submodule "deps/servant"]
+	path = deps/servant
+	url = https://github.com/haskell-servant/servant

@@ -30,19 +30,19 @@ body {
 }
 
 .row-name {
-    width: 200px;
+    width: 180px;
 }
 
 .row-id {
-    width: 30px;
+    width: 20px;
 }
 
 .row-dura {
-    width: 70px;
+    width: 40px;
 }
 
 .row-url {
-    width: 300px;
+    width: 250px;
 }
 
 .row-del {

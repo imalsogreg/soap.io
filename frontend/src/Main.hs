@@ -8,7 +8,6 @@
 {-# LANGUAGE RankNTypes            #-}
 {-# LANGUAGE RecursiveDo           #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
-{-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TupleSections         #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
@@ -23,6 +22,7 @@ import           Control.Monad
 import           Control.Monad.Fix
 import           Control.Monad.IO.Class
 import           Data.Bool
+import qualified Data.ByteString            as BS
 import           Data.Functor.Compose
 import qualified Data.Map                   as M
 import           Data.Maybe
@@ -30,7 +30,7 @@ import           Data.Monoid
 import           Data.Proxy
 import qualified Data.Text                  as T
 import qualified Data.Text.Encoding         as TE
-import           Data.FileEmbed
+-- import           Data.FileEmbed
 import           GHCJS.DOM.EventM           (EventM, event, on)
 import qualified GHCJS.DOM.HTMLImageElement as ImageElement
 import           GHCJS.DOM.MouseEvent       (getClientX, getClientY)
@@ -54,7 +54,7 @@ import           Soap.API
 
 ------------------------------------------------------------------------------
 main :: IO ()
-main = mainWidgetWithCss $(embedFile "../static/style.css") mainApp
+main = mainWidgetWithCss header' mainApp
 
 
 ------------------------------------------------------------------------------
@@ -380,7 +380,7 @@ baseUrl :: Reflex t => Dynamic t BaseUrl
 baseUrl = constDyn $ BasePath "api"
 #else
 baseUrl :: Reflex t => Dynamic t BaseUrl
-baseUrl = constDyn $ BaseFullUrl Http "localhost" 8001 ""
+baseUrl = constDyn $ BaseFullUrl Http "localhost" 8001 "/api"
 #endif
 
 
@@ -447,3 +447,118 @@ header = do
     elAttr "link" ("href" =: "style.css" <>
                    "rel" =: "stylesheet" <>
                    "type" =: "text/css") blank
+
+header' :: BS.ByteString
+header' = TE.encodeUtf8 $ T.unlines [
+  "html {"
+ ,"    height: 100%;"
+ ,"    width: 100%;"
+ ,"}"
+ ,""
+ ,"body {"
+ ,"    padding: 0px;"
+ ,"    margin: 0px;"
+ ,"    height: 100%;"
+ ,"    width: 100%;"
+ ,"}"
+ ,""
+ ,".content {"
+ ,"    padding-top:50px;"
+ ,"    display: flex;"
+ ,"    flex-direction: row;"
+ ,"    font-family: Helvetica;"
+ ,"    color: hsl(191,18%,28%);"
+ ,"    font-size: 16pt;"
+ ,"    height: 100%;"
+ ,"    background-color: hsl(169,27%,85%);"
+ ,"}"
+ ,""
+ ,""
+ ,".row-url, .row-name {"
+ ,"    max-width: 300px;"
+ ,"    overflow: hidden;"
+ ,"    text-overflow: ellipsis;"
+ ,"    white-space: nowrap;"
+ ,"}"
+ ,""
+ ,".row-name {"
+ ,"    width: 180px;"
+ ,"}"
+ ,""
+ ,".row-id {"
+ ,"    width: 20px;"
+ ,"}"
+ ,""
+ ,".row-dura {"
+ ,"    width: 40px;"
+ ,"}"
+ ,""
+ ,".row-url {"
+ ,"    width: 250px;"
+ ,"}"
+ ,""
+ ,".row-del {"
+ ,"    width: 30px;"
+ ,"}"
+ ,""
+ ,"div.soap-row.selected {"
+ ,"    background-color: white;"
+ ,"}"
+ ,""
+ ,".soap-row {"
+ ,"    display: flex;"
+ ,"    background-attachment:fixed;"
+ ,"    white-space: nowrap;"
+ ,"    height: 50px;"
+ ,"    justify-content: space-between;"
+ ,"    padding: 15px;"
+ ,"    box-shadow: 0px 2px 2px rgba(0,0,0,0.1);"
+ ,"    border-left: 15px solid gray;"
+ ,"    background-color: rgba(255,255,255,0.75);"
+ ,"    margin: 0px 10px 10px 15px;"
+ ,"}"
+ ,""
+ ,".table > div:first-child {"
+ ,"    margin-top: 15px;"
+ ,"}"
+ ,""
+ ,".table > div:not(last-child):hover {"
+ ,"    background-color: white;"
+ ,"}"
+ ,""
+ ,""
+ ,""
+ ,".row-del {"
+ ,"    justify-content: flex-end;"
+ ,"}"
+ ,""
+ ,".table > div > div {"
+ ,"    display: flex;"
+ ,"    align-items: center;"
+ ,"    /* padding: 10 px; */"
+ ,"}"
+ ,""
+ ,".table {"
+ ,"    display: flex;"
+ ,"    flex-direction: column;"
+ ,"    align-items: space-between;"
+ ,"}"
+ ,""
+ ,".error {"
+ ,"    box-shadow: 0px 0px 5px hsl(0, 50%, 50%);"
+ ,"}"
+ ,""
+ ,".error-msg {"
+ ,"    font-size: 8pt;"
+ ,"}"
+ ,""
+ ,".range {"
+ ,"    display: flex;"
+ ,"    flex-direction: column;"
+ ,"    margin: 20px;"
+ ,"}"
+ ,""
+ ,".right-half {"
+ ,"    padding-top: 15px;"
+ ,"}"
+ ]

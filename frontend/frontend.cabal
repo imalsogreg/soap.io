@@ -21,9 +21,10 @@ executable frontend
   -- other-extensions:    
   build-depends:       base >=4.9 && <4.10
                      , aeson
+                     , bytestring
                      , common
                      , containers
-                     , file-embed
+                     -- , file-embed
                      , lens
                      , reflex-dom
                      , servant-reflex

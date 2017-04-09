@@ -49,7 +49,7 @@ instance PrimitivePersistField (EKey a) where
 type CRUD v =
        ReqBody '[JSON] v     :> Post '[JSON] (EKey v)
   :<|> Capture "id" (EKey v) :> Get '[JSON] v
-  :<|> Capture "id" (EKey v) :> ReqBody '[JSON] v :> Get '[JSON] NoContent
+  :<|> Capture "id" (EKey v) :> ReqBody '[JSON] v :> Post '[JSON] NoContent
   :<|> Capture "id" (EKey v) :> Delete '[JSON] NoContent
   :<|> Get '[JSON] [(EKey v, v)]
 

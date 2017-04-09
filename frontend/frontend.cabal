@@ -23,6 +23,7 @@ executable frontend
                      , aeson
                      , common
                      , containers
+                     , file-embed
                      , lens
                      , reflex-dom
                      , servant-reflex

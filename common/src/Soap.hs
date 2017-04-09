@@ -52,15 +52,12 @@ instance FromJSON Soap
 optimalSoapSize
     :: Soap -> Double -> Double -> Double -> (Double, Double, Double)
 optimalSoapSize (Soap _ durability _ _) showerLen budget resl = do
-    -- print samples
     minimumBy (comparing cost) samples
   where
     grid    = [1, 1 + resl .. 5]  -- One dim sample spacing
     samples = [(l,w, 5/l/w) | l <- grid , w <- grid]
-
-    -- This is the cost function we want to minimize
     cost (l,w,h) =
-        let budgetFactor  = (2 - l)^2 + (2 - w)^2*showerLen + (2 - h)^2 / (budget)
+        let budgetFactor  = (2 - l)^2 + (2 - w)^2*showerLen + (2 - h)^2 / budget
             durableFactor = (3 - h)^2 + (2 - w)^2 + (3 - l)^2 / (showerLen + budget)
         in  budgetFactor + durableFactor
 

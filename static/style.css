@@ -11,6 +11,7 @@ body {
 }
 
 .content {
+    padding-top:50px;
     display: flex;
     flex-direction: row;
     font-family: Helvetica;
@@ -103,4 +104,8 @@ div.soap-row.selected {
     display: flex;
     flex-direction: column;
     margin: 20px;
+}
+
+.right-half {
+    padding-top: 15px;
 }

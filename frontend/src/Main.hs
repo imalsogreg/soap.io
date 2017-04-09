@@ -30,6 +30,7 @@ import           Data.Monoid
 import           Data.Proxy
 import qualified Data.Text                  as T
 import qualified Data.Text.Encoding         as TE
+import           Data.FileEmbed
 import           GHCJS.DOM.EventM           (EventM, event, on)
 import qualified GHCJS.DOM.HTMLImageElement as ImageElement
 import           GHCJS.DOM.MouseEvent       (getClientX, getClientY)
@@ -53,7 +54,7 @@ import           Soap.API
 
 ------------------------------------------------------------------------------
 main :: IO ()
-main = mainWidgetWithHead header mainApp
+main = mainWidgetWithCss $(embedFile "../static/style.css") mainApp
 
 
 ------------------------------------------------------------------------------
@@ -374,8 +375,13 @@ note :: e -> Maybe a -> Either e a
 note e Nothing  = Left e
 note _ (Just a) = Right a
 
+#ifdef ghcjs_HOST_OS
 baseUrl :: Reflex t => Dynamic t BaseUrl
 baseUrl = constDyn $ BasePath "api"
+#else
+baseUrl :: Reflex t => Dynamic t BaseUrl
+baseUrl = constDyn $ BaseFullUrl Http "localhost" 8001 ""
+#endif
 
 
 type VDynamic t a = Compose (Dynamic t) (Either T.Text) a

@@ -107,12 +107,10 @@ estimationHandler
     -> Maybe Double
     -> Maybe Double
     -> AppHandler (Double, Double, Double)
-estimationHandler oid showerLen budget = do
-    -- soap <- return $ Soap "ExampleSoap" 5 "example.com/image.jpg" (SoapColors ("black", "black"))
+estimationHandler oid (Just showerLen) (Just budget) = do
     soap <- noteH err404 . runGh . G.get $ fromEKey oid
-    liftIO $ print showerLen
-    liftIO $ print budget
-    liftIO $ optimalSoapSize soap (fromMaybe 1 showerLen) (fromMaybe 1 budget) 1
+    return $ optimalSoapSize soap showerLen budget 1
+estimationHandler _ _ _ = throwError err412
 
 
 noteH :: ServantErr -> AppHandler (Maybe a) -> AppHandler a
@@ -132,21 +130,11 @@ serveColor
     -> (Int,Int)
     -> AppHandler T.Text
 serveColor oid (x,y) = do
-    liftIO $ print "serveColorHandler"
     soap <- noteH err404 . runGh . G.get $ fromEKey oid
-    liftIO $ print "soap ok"
     img  <- liftIO $ fetchImage (soapImgUrl soap)
     case img of
         Left e -> throwError err500 { errBody = "Bad image fetch" }
-        Right img'' -> do
-            img' <- return $ J.convertRGB8 img''
-            -- liftIO $ putStrLn "Got converted image"
-            -- liftIO $ putStrLn $ "fetching color for point: " ++ show (x,y)
-            -- liftIO $ J.saveJpgImage 9 "/Users/greghale/test.jpg" (J.ImageRGB8 img')
-            -- liftIO $ J.savePngImage "/Users/greghale/test.png" (J.ImageRGB8 img')
-            mc   <- return $ getMeanColor img'
-            -- liftIO $ putStrLn $ "Got mean color: " ++ show mc
-            return mc
+        Right img'' -> return $ getMeanColor (J.convertRGB8 img'')
   where
        getMeanColor i = hslMean $ mconcat [toMeanPixel (J.pixelAt i (x+x') (y+y')) | x' <- [-5..5], y' <- [-5..5]]
 
